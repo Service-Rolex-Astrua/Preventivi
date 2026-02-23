@@ -225,7 +225,7 @@ function buildMenus(){
 
     // Get headers order to identify column H and beyond
     const keys = Object.keys(selectedRow);
-    const indexH = 7; // zero-based index for column H
+    const indexH = 6; // zero-based index for column H
 
     // Partial section keys: "Solo cambio vetro" and "Solo lucidatura"
     const partialKeys = ["Solo cambio vetro", "Solo lucidatura"];
@@ -238,13 +238,7 @@ function buildMenus(){
         const price = parseFloat(priceStr);
         const isBracelet = key.includes("Bracciale");
 
-        if ((!price || price === 0) && isBracelet){
-            const div = document.createElement("div");
-            div.className = "option not-available";
-            div.textContent = `${key}: non disponibile`;
-            partial.appendChild(div);
-            return;
-        }
+
         if (!price || price === 0) return; // skip zero or missing price if not bracelet
 
         const opt = document.createElement("div");
@@ -276,6 +270,7 @@ function buildMenus(){
         if (!priceStr || priceStr.trim() === "") return; // skip empty fields
         const price = parseFloat(priceStr);
         const isBracelet = key.includes("Bracciale");
+        const isVetro = key.includes("Vetro");
 
         if ((!price || price === 0) && isBracelet){
             const div = document.createElement("div");
@@ -284,6 +279,15 @@ function buildMenus(){
             full.appendChild(div);
             return;
         }
+
+        if ((!price || price === 0) && isVetro){
+            const div = document.createElement("div");
+            div.className = "option not-available";
+            div.textContent = `${key} omaggio`;
+            full.appendChild(div);
+            return;
+        }
+
         if (!price || price === 0) return; // skip zero or missing price if not bracelet
 
         const opt = document.createElement("div");
