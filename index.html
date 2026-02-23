@@ -63,14 +63,15 @@
         top: 0;
         background: #6c4521;
         color: #d9cfc1;
-        padding: 40px;
+        padding: 10px;
         margin-bottom: 5px;
         border-radius: 8px;
         z-index: 10;
-        font-size: 2.2em;
+        font-size: 1.7em;
         text-align: center;
         display: block;
         margin: 0 auto;
+        white-space: pre-line;
     }
     .menu {
         margin-bottom: 12px;
@@ -202,7 +203,10 @@ function selectReference(row){
     searchInput.value = row["Referenza"];
     autocomplete.innerHTML = "";
     document.getElementById("info").style.display = "block";
-    document.getElementById("info").textContent = `Modello: ${row["Modello"]} — Calibro: ${row["Calibro"]}`;
+    document.getElementById("info").textContent = 
+    `Referenza: ${row["Referenza"]}
+    Modello: ${row["Modello"]}
+    Calibro: ${row["Calibro"]}`;
     document.getElementById("menus").style.display = "block";
     // Clear menus completely before rebuilding
     document.getElementById("menu-partial").innerHTML = "";
