@@ -229,17 +229,17 @@ function buildMenus(){
 
     // Partial section keys: "Solo cambio vetro" and "Solo lucidatura"
     const partialKeys = ["Solo cambio vetro", "Solo lucidatura"];
+    let partialAvailableCount = 0;
 
     // Build partial menu first with only specified keys
     partialKeys.forEach(key => {
         if (!(key in selectedRow)) return;
         const priceStr = selectedRow[key];
-        if (!priceStr || priceStr.trim() === "") return; // skip empty fields
         const price = parseFloat(priceStr);
-        const isBracelet = key.includes("Bracciale");
-
-
-        if (!price || price === 0) return; // skip zero or missing price if not bracelet
+        if (isNaN(price) || price === 0){
+            return;
+        }
+        partialAvailableCount++;
 
         const opt = document.createElement("div");
         opt.className = "option";
@@ -258,7 +258,14 @@ function buildMenus(){
 
         partial.appendChild(opt);
     });
+    if (partialAvailableCount === 0){
+        const div = document.createElement("div");
+        div.className = "option not-available";
+        div.textContent = "Non disponibile";
+        partial.appendChild(div);
+    }
 
+    let fullAvailableCount = 0;
     // Build full menu with all keys from column H onward
     keys.forEach((key, idx) => {
         if (["Referenza","Modello","Calibro"].includes(key)) return;
@@ -290,6 +297,7 @@ function buildMenus(){
 
         if (!price || price === 0) return; // skip zero or missing price if not bracelet
 
+        fullAvailableCount++;
         const opt = document.createElement("div");
         opt.className = "option";
         opt.innerHTML = `<label><input type="checkbox" data-price="${price}" data-section="full" data-key="${key}"> ${key}</label><span>€ ${price}</span>`;
@@ -307,6 +315,13 @@ function buildMenus(){
 
         full.appendChild(opt);
     });
+    
+    if (fullAvailableCount === 0){
+        const div = document.createElement("div");
+        div.className = "option not-available";
+        div.textContent = "L'orologio necessita di un preventivo dettagliato";
+        full.appendChild(div);
+    }
 }
 
 function recalcTotal(){
@@ -314,7 +329,7 @@ function recalcTotal(){
     for(const key of selections.partial){
         const price = parseFloat(selectedRow[key]);
         if(!isNaN(price)) sum += price;
-    }
+    } 
     for(const key of selections.full){
         const price = parseFloat(selectedRow[key]);
         if(!isNaN(price)) sum += price;
